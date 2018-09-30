@@ -1,8 +1,7 @@
 <template>
-    <div>
-        <div> test test </div>
-        this is main<br> this is main
-    </div>
+    <section>
+        <div> Connect</div>
+    </section>
 </template>
 
 <script>
