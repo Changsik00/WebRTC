@@ -5,16 +5,37 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 
-var count = 0;
+var call = null;
+var receive = null;
+
+
 io.on('connection', function(socket){
-  count = count + 1;
-  console.log('a user connected', count);
+  console.log('#@# server connection');
+
   socket.on('disconnect', function(){
-    console.log('user disconnected');
+    console.log('#@# server disconnected');
   });
 
-  socket.on('chat message', function(msg){
-    console.log('message: ' + msg);
+  socket.on('call', function(sdp){
+  	 console.log('#@# server call', sdp);
+  	 call = sdp;
+  });
+
+  socket.on('receive', function(sdp){
+  	console.log('#@# server receive', sdp);
+  	 receive = sdp;
+  	 if(call && receive) {
+  	 	var connectionData = {
+  	 		call: call,
+  	 		receive: receive
+  	 	}
+
+  	 	setTimeout(() => {
+  	 		io.emit('conntect-webrtc', connectionData);
+  	 		console.log("#@# server conntect-webrtc", connectionData);
+  	 	} , 300);
+
+  	 }
   });
   
 });
